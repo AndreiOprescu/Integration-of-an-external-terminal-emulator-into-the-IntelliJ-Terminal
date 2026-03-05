@@ -1,0 +1,1 @@
+# Integration-of-an-external-terminal-emulator-into-the-IntelliJ-Terminal
