@@ -1,5 +1,8 @@
 package terminal;
 
+import java.util.HashSet;
+import java.util.Set;
+
 /**
  * Represents a single character cell in a terminal text buffer.
  *
@@ -22,19 +25,30 @@ public class CharacterCell {
      * The foreground (text) color for this cell.
      * Valid values are {@code "default"} or one of the 16 standard terminal color names.
      */
-    String foregroundColor;
+    Color foregroundColor;
 
     /**
      * The background color for this cell.
      * Valid values are {@code "default"} or one of the 16 standard terminal color names.
      */
-    String backgroundColor;
+    Color backgroundColor;
 
     /**
      * The style flags applied to this cell's character (e.g., {@code "bold"},
      * {@code "italic"}, {@code "underline"}, or a combined representation).
      */
-    String style;
+    Set<Style> styles;
+
+    public CharacterCell(Character character, Color foregroundColor, Color backgroundColor, Set<Style> styles) {
+        this.character = character;
+        this.foregroundColor = foregroundColor;
+        this.backgroundColor = backgroundColor;
+        this.styles = new HashSet<>(styles);
+    }
+
+    public CharacterCell(Character character, Color foregroundColor, Color backgroundColor) {
+        this(character, foregroundColor, backgroundColor, new HashSet<>());
+    }
 
     /**
      * Returns the character stored in this cell.
@@ -59,7 +73,7 @@ public class CharacterCell {
      *
      * @return the foreground color string (e.g., {@code "default"}, {@code "red"})
      */
-    public String getForegroundColor() {
+    public Color getForegroundColor() {
         return foregroundColor;
     }
 
@@ -69,7 +83,7 @@ public class CharacterCell {
      * @param foregroundColor the foreground color to apply; should be {@code "default"}
      *                        or one of the 16 standard terminal color names
      */
-    protected void setForegroundColor(String foregroundColor) {
+    protected void setForegroundColor(Color foregroundColor) {
         this.foregroundColor = foregroundColor;
     }
 
@@ -78,7 +92,7 @@ public class CharacterCell {
      *
      * @return the background color string (e.g., {@code "default"}, {@code "blue"})
      */
-    public String getBackgroundColor() {
+    public Color getBackgroundColor() {
         return backgroundColor;
     }
 
@@ -88,7 +102,7 @@ public class CharacterCell {
      * @param backgroundColor the background color to apply; should be {@code "default"}
      *                        or one of the 16 standard terminal color names
      */
-    protected void setBackgroundColor(String backgroundColor) {
+    protected void setBackgroundColor(Color backgroundColor) {
         this.backgroundColor = backgroundColor;
     }
 
@@ -97,8 +111,8 @@ public class CharacterCell {
      *
      * @return a string representing the active style(s) (e.g., {@code "bold"}, {@code "italic"})
      */
-    public String getStyle() {
-        return style;
+    public Set<Style> getStyles() {
+        return styles;
     }
 
     /**
@@ -107,7 +121,15 @@ public class CharacterCell {
      * @param style a string representing the desired style(s) such as {@code "bold"},
      *              {@code "italic"}, or {@code "underline"}
      */
-    protected void setStyle(String style) {
-        this.style = style;
+    protected void addStyle(Style style) {
+        this.styles.add(style);
+    }
+
+    protected boolean removeStyle(Style style) {
+        if(styles.contains(style)) {
+            styles.remove(style);
+            return true;
+        }
+        return false;
     }
 }
