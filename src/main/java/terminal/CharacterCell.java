@@ -50,6 +50,10 @@ public class CharacterCell {
         this(character, foregroundColor, backgroundColor, new HashSet<>());
     }
 
+    public CharacterCell(Character character) {
+        this(character, Color.WHITE, Color.BLACK, new HashSet<>());
+    }
+
     /**
      * Returns the character stored in this cell.
      *
@@ -131,5 +135,9 @@ public class CharacterCell {
             return true;
         }
         return false;
+    }
+
+    public String toString() {
+        return this.character.toString();
     }
 }
