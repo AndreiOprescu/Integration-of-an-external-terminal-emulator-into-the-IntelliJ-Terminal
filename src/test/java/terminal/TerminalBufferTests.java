@@ -21,7 +21,7 @@ import static org.junit.jupiter.api.Assertions.*;
  *  - Scrollback
  *  - Edge / boundary cases
  */
-class TerminalBufferTest {
+class TerminalBufferTests {
 
     // Standard small terminal used by most tests
     private static final int W = 10;

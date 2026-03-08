@@ -6,7 +6,7 @@ import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
-class TerminalLineTest {
+class TerminalLineTests {
 
     private TerminalLine line;
     private static final int WIDTH = 10;
