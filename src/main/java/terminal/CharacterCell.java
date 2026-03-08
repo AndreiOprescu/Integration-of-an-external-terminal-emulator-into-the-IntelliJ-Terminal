@@ -7,7 +7,7 @@ import java.util.Set;
  * A single cell in the terminal grid, holding a character and its visual attributes.
  *
  * <p>Every position on screen maps to one of these. A null character means the cell
- * hasn't been written to yet — callers should treat it as an empty space. Colors and
+ * hasn't been written to yet - callers should treat it as an empty space. Colors and
  * styles are stored per-cell so each character can be rendered independently.</p>
  *
  * <p>The mutation setters are package-private to keep writes funnelled through
@@ -24,11 +24,11 @@ public class CharacterCell {
     /** Background color shown behind the character. */
     Color backgroundColor;
 
-    /** Active style flags for this cell — bold, italic, underline, etc. */
+    /** Active style flags for this cell - bold, italic, underline, etc. */
     Set<Style> styles;
 
     /**
-     * Full constructor — sets every attribute explicitly.
+     * Full constructor - sets every attribute explicitly.
      * The styles set is defensively copied so later changes to the caller's set
      * don't silently affect this cell.
      *
@@ -56,7 +56,7 @@ public class CharacterCell {
     }
 
     /**
-     * Minimal constructor — uses white text on black with no styles.
+     * Minimal constructor - uses white text on black with no styles.
      * Handy for plain text where you don't care about colors.
      *
      * @param character the character to display
@@ -109,7 +109,7 @@ public class CharacterCell {
 
     /**
      * Returns the live set of styles applied to this cell.
-     * Note that this is not a copy — mutating the returned set will affect the cell directly.
+     * Note that this is not a copy - mutating the returned set will affect the cell directly.
      */
     public Set<Style> getStyles() {
         return styles;
@@ -140,7 +140,7 @@ public class CharacterCell {
 
     /**
      * Replaces the entire styles set. Unlike the constructor, this does not make
-     * a defensive copy — the cell will hold a direct reference to the set you pass in.
+     * a defensive copy - the cell will hold a direct reference to the set you pass in.
      *
      * @param styles the new set of styles
      */
