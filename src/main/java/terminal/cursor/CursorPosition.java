@@ -1,4 +1,4 @@
-package terminal;
+package terminal.cursor;
 
 /**
  * Tracks the cursor's position within a terminal screen and enforces screen bounds.

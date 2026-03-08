@@ -1,6 +1,7 @@
-package terminal;
+package terminal.cursor;
 
 import org.junit.jupiter.api.Test;
+import terminal.cursor.CursorPosition;
 
 import static org.junit.jupiter.api.Assertions.*;
 

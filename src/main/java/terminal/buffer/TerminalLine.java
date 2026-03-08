@@ -1,4 +1,4 @@
-package terminal;
+package terminal.buffer;
 
 /**
  * Represents a single row in the terminal grid.

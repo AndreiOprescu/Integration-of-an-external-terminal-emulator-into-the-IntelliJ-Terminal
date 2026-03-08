@@ -1,6 +1,9 @@
-package terminal;
+package terminal.buffer;
 
 import org.junit.jupiter.api.Test;
+import terminal.buffer.CharacterCell;
+import terminal.style.Color;
+import terminal.style.Style;
 
 import java.util.HashSet;
 import java.util.Set;

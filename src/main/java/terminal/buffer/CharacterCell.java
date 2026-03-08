@@ -1,4 +1,7 @@
-package terminal;
+package terminal.buffer;
+
+import terminal.style.Color;
+import terminal.style.Style;
 
 import java.util.HashSet;
 import java.util.Set;

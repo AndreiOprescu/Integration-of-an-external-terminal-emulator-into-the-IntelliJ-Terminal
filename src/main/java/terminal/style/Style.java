@@ -1,4 +1,4 @@
-package terminal;
+package terminal.style;
 
 public enum Style {
     BOLD,

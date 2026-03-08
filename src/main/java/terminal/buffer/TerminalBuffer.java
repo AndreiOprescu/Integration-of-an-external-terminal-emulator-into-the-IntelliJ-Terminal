@@ -1,4 +1,8 @@
-package terminal;
+package terminal.buffer;
+
+import terminal.style.Color;
+import terminal.style.Style;
+import terminal.cursor.CursorPosition;
 
 import java.util.*;
 

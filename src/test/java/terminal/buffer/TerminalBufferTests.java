@@ -1,8 +1,13 @@
-package terminal;
+package terminal.buffer;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
+import terminal.buffer.CharacterCell;
+import terminal.buffer.TerminalBuffer;
+import terminal.cursor.CursorPosition;
+import terminal.style.Color;
+import terminal.style.Style;
 
 import java.util.Set;
 
