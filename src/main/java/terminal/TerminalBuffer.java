@@ -285,11 +285,4 @@ public class TerminalBuffer {
         this.cursor = new CursorPosition(row, col, this.height, this.width);
     }
 
-    public int getFirstLineIndex() {
-        return firstLineIndex;
-    }
-
-    public int getLastLineIndex() {
-        return lastLineIndex;
-    }
 }
