@@ -85,7 +85,7 @@ public class TerminalBuffer {
         TerminalLine line = allLines.get(absoluteRow);
         line.setCell(cursor.getCol(), new CharacterCell(character, foregroundColor, backgroundColor, styles));
 
-        // Check for line wrap before moving the cursor — moveRight() clamps at
+        // Check for line wrap before moving the cursor - moveRight() clamps at
         // width-1, so checking after the move would never catch this
         if (cursor.getCol() == width - 1) {
             line.setWrapped(true);
@@ -94,7 +94,7 @@ public class TerminalBuffer {
             if (cursor.getRow() < height - 1) {
                 cursor.moveDown();
             } else {
-                // We're on the last row — scroll the screen up instead of moving the cursor down
+                // We're on the last row - scroll the screen up instead of moving the cursor down
                 scroll();
             }
         } else {
@@ -151,7 +151,7 @@ public class TerminalBuffer {
         TerminalLine line = allLines.get(row);
 
         if (line.isWrapped()) {
-            // The line already wraps — grab the last cell before we shift so we
+            // The line already wraps - grab the last cell before we shift so we
             // can push it onto the next line
             CharacterCell lastCell = line.getCell(this.width - 1);
             System.arraycopy(line.getCells(), col, line.getCells(), col + 1, this.width - col - 1);
@@ -165,7 +165,7 @@ public class TerminalBuffer {
             // Nothing fell off the end, so we're done
             if (lastCell == null) return;
 
-            // A non-null cell was pushed off — mark this line as wrapped and
+            // A non-null cell was pushed off - mark this line as wrapped and
             // start a new continuation line below it
             line.setWrapped(true);
             TerminalLine newLine = new TerminalLine(this.width);
@@ -315,7 +315,7 @@ public class TerminalBuffer {
 
     /**
      * Returns the entire visible screen as a single string. Rows are separated
-     * by newlines, except where a line is marked as wrapped — in that case the
+     * by newlines, except where a line is marked as wrapped - in that case the
      * next row follows immediately with no newline between them.
      *
      * @return the screen content as a string
@@ -336,8 +336,8 @@ public class TerminalBuffer {
     }
 
     /**
-     * Returns the full buffer contents — both scrollback history and the
-     * visible screen — as a single string, using the same wrapping rules as
+     * Returns the full buffer contents - both scrollback history and the
+     * visible screen - as a single string, using the same wrapping rules as
      * {@link #getScreenAsString()}.
      *
      * @return the complete buffer as a string
