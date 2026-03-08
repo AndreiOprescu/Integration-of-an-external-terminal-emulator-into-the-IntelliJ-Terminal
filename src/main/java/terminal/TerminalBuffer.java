@@ -1,8 +1,6 @@
 package terminal;
 
-import java.util.ArrayDeque;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 public class TerminalBuffer {
     private List<TerminalLine> allLines;
@@ -13,14 +11,26 @@ public class TerminalBuffer {
     private int maxSize;
 
     private int firstLineIndex, lastLineIndex;
+    private Color backgroundColor, foregroundColor;
+    private Set<Style> styles;
 
     public TerminalBuffer(int width, int height, int maxSize) {
         this.width = width;
         this.height = height;
         this.maxSize = maxSize;
 
+        this.backgroundColor = Color.BLACK;
+        this.foregroundColor = Color.WHITE;
+        this.styles = new HashSet<>();
+
         this.allLines = new ArrayList<>();
-        this.allLines.add(new TerminalLine(width));
+        for(int i = 0; i < this.height; i++) {
+            TerminalLine line = new TerminalLine(width);
+            allLines.add(line);
+            for(int j = 0; j < this.width; j++) {
+                line.setCell(j, new CharacterCell(' ', backgroundColor, foregroundColor, styles));
+            }
+        }
 
         this.cursor = new CursorPosition(0, 0, height, width);
 
@@ -31,20 +41,53 @@ public class TerminalBuffer {
     // ------ Editing Functionality ------
 
     public void writeText(Character character) {
-        TerminalLine line = allLines.get(this.cursor.getRow());
-        line.setCell(cursor.getCol(), new CharacterCell(character));
-        cursor.moveRight();
+        int absoluteRow = firstLineIndex + cursor.getRow();
 
-        int col = this.cursor.getCol();
-        if(col >= this.width) {
-            this.cursor.setCol(0);
-            this.cursor.moveDown();
+        while (absoluteRow >= allLines.size()) {
+            allLines.add(new TerminalLine(width));
         }
-        if(this.cursor.getRow() >= this.allLines.size()) allLines.add(new TerminalLine(this.width));
+
+        TerminalLine line = allLines.get(absoluteRow);
+        line.setCell(cursor.getCol(), new CharacterCell(character, foregroundColor, backgroundColor, styles));
+
+        // Check wrap BEFORE advancing the cursor — moveRight() clamps at W-1
+        // so a post-write col >= width check would never fire.
+        if (cursor.getCol() == width - 1) {
+            line.setWrapped(true);
+            cursor.setCol(0);
+
+            if (cursor.getRow() < height - 1) {
+                cursor.moveDown();
+            } else {
+                // Cursor is on the last screen row — scroll instead of moving down
+                scroll();
+            }
+        } else {
+            cursor.moveRight();
+        }
+    }
+
+    private void scroll() {
+        // Advance the screen window by one line
+        firstLineIndex++;
+        lastLineIndex++;
+
+        // Trim scrollback if it exceeds maxSize
+        while (firstLineIndex > maxSize) {
+            allLines.remove(0);
+            firstLineIndex--;
+            lastLineIndex--;
+        }
+
+        // Ensure the new bottom line exists
+        int newAbsoluteBottom = firstLineIndex + height - 1;
+        while (newAbsoluteBottom >= allLines.size()) {
+            allLines.add(new TerminalLine(width));
+        }
     }
 
     public void insertText(Character character) {
-        CharacterCell characterCell = new CharacterCell(character);
+        CharacterCell characterCell = new CharacterCell(character, foregroundColor, backgroundColor, styles);
         this.insertText(characterCell, cursor.getRow(), cursor.getCol());
     }
 
@@ -83,25 +126,26 @@ public class TerminalBuffer {
 
     public void clearEntireScreen() {
         allLines = new ArrayList<>();
-        allLines.add(new TerminalLine(width));
+        for(int i = 0; i <= this.height; i++) {
+            allLines.add(new TerminalLine(width));
+        }
 
         this.firstLineIndex = 0;
         this.lastLineIndex = this.height;
     }
 
     public void clearScreenAndScrollback() {
-        for(int i = this.firstLineIndex; i < Math.max(this.lastLineIndex, this.allLines.size()); i++) {
-            allLines.remove(this.firstLineIndex);
+        allLines.clear();
+        for(int i = 0; i < this.height; i++) {
+            TerminalLine line = new TerminalLine(width);
+            allLines.add(line);
+            for(int j = 0; j < this.width; j++) {
+                line.setCell(j, new CharacterCell(' ', backgroundColor, foregroundColor, styles));
+            }
         }
-        if(this.firstLineIndex > this.height) {
-            this.firstLineIndex -= this.height;
-            this.lastLineIndex -= this.height;
-        }
-        else {
-            allLines.add(new TerminalLine(width));
-            this.firstLineIndex = 0;
-            this.lastLineIndex = this.height;
-        }
+        firstLineIndex = 0;
+        lastLineIndex  = height;
+        cursor.setPosition(0, 0);
     }
 
     // ------ Content Access ------
@@ -221,6 +265,12 @@ public class TerminalBuffer {
         return sb.toString();
     }
 
+    public void setAttributes(Color foregroundColor, Color backgroundColor, Set<Style> styles) {
+        this.foregroundColor = foregroundColor;
+        this.backgroundColor = backgroundColor;
+        this.styles = new HashSet<>(styles);
+
+    }
 
     // ------ Cursor Functionality ------
     public CursorPosition getCursor() {
@@ -233,5 +283,13 @@ public class TerminalBuffer {
 
     public void setCursor(int row, int col) {
         this.cursor = new CursorPosition(row, col, this.height, this.width);
+    }
+
+    public int getFirstLineIndex() {
+        return firstLineIndex;
+    }
+
+    public int getLastLineIndex() {
+        return lastLineIndex;
     }
 }
