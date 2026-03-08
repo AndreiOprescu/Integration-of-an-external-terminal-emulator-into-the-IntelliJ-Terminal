@@ -139,7 +139,6 @@ public class CharacterCell {
 
     public void setStyles(Set<Style> styles) {
         this.styles = styles;
-        System.out.println(getStyles().toString());
 
     }
 
