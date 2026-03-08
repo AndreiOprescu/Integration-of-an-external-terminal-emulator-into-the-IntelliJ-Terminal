@@ -1,6 +1,5 @@
 package terminal;
 
-import java.util.Arrays;
 
 public class TerminalLine {
     private CharacterCell[] cells;
